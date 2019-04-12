@@ -14,7 +14,7 @@
 
 //////////////////////////////////////////////////
 //  private
-int findElementIndexOnBT(BT_t *B, int rootIndex, int keyValue, BT_OPTION_e option);
+int findElementIndexOnBT(BT_t *B, int nodeIndex, int keyValue, BT_OPTION_e option);
 int findLeftmostLeefIndexOnBT(BT_t *B, int root);
 int findElementIndexOnBTslave(BT_t *B, int nodeIndex, void *keyValue);
 
@@ -106,11 +106,11 @@ void *findElementOnBT(BT_t *B, int keyValue, BT_OPTION_e option) {
     return NULL;
 }
 
-int levelOrderTraversalOnBT(BT_t *B, int rootIndex, int (*func)(BT_t*, int, void*), void *parameter) {
+int levelOrderTraversalOnBT(BT_t *B, int nodeIndex, int (*func)(BT_t*, int, void*), void *parameter) {
     if (B == NULL) return -1;
-    if (rootIndex < 0) return -1;
+    if (nodeIndex < 0) return -1;
     
-    for (int i=rootIndex; i<B->capacity; i++) {
+    for (int i=nodeIndex; i<B->capacity; i++) {
         if (B->array[i] != NULL) {
             int index = func(B, i, parameter);
             if (index >= 0) return index;
@@ -120,58 +120,58 @@ int levelOrderTraversalOnBT(BT_t *B, int rootIndex, int (*func)(BT_t*, int, void
     return -1;
 }
 
-int preOrderTraversalOnBT(BT_t *B, int rootIndex, int (*func)(BT_t*, int, void*), void *parameter) {
+int preOrderTraversalOnBT(BT_t *B, int nodeIndex, int (*func)(BT_t*, int, void*), void *parameter) {
     if (B == NULL) return -1;
-    if (rootIndex < 0) return -1;
-    if (rootIndex >= B->capacity) return -1;
+    if (nodeIndex < 0) return -1;
+    if (nodeIndex >= B->capacity) return -1;
     
     //    printf("pre-order traversal : array[%d] = %d\n", root, B->array[root]);
     int index = -1;
-    index = func(B, rootIndex, parameter);
+    index = func(B, nodeIndex, parameter);
     if (index >= 0) return index;
-    index = preOrderTraversalOnBT(B, getLeftIndex(rootIndex), func, parameter);
+    index = preOrderTraversalOnBT(B, getLeftIndex(nodeIndex), func, parameter);
     if (index >= 0) return index;
-    index = preOrderTraversalOnBT(B, getRightIndex(rootIndex), func, parameter);
+    index = preOrderTraversalOnBT(B, getRightIndex(nodeIndex), func, parameter);
     if (index >= 0) return index;
     
     return -1;
 }
 
-int inOrderTraversalOnBT(BT_t *B, int rootIndex, int (*func)(BT_t*, int, void*), void *parameter) {
+int inOrderTraversalOnBT(BT_t *B, int nodeIndex, int (*func)(BT_t*, int, void*), void *parameter) {
     if (B == NULL) return -1;
-    if (rootIndex < 0) return -1;
-    if (rootIndex >= B->capacity) return -1;
+    if (nodeIndex < 0) return -1;
+    if (nodeIndex >= B->capacity) return -1;
     
     int index = -1;
-    index = inOrderTraversalOnBT(B, getLeftIndex(rootIndex), func, parameter);
+    index = inOrderTraversalOnBT(B, getLeftIndex(nodeIndex), func, parameter);
     if (index >= 0) return index;
     //    printf("in-order traversal : array[%d] = %d\n", root, B->array[root]);
-    index = func(B, rootIndex, parameter);
+    index = func(B, nodeIndex, parameter);
     if (index >= 0) return index;
-    index = preOrderTraversalOnBT(B, getRightIndex(rootIndex), func, parameter);
+    index = preOrderTraversalOnBT(B, getRightIndex(nodeIndex), func, parameter);
     if (index >= 0) return index;
     
     return -1;
 }
 
-int postOrderTraversalOnBT(BT_t *B, int rootIndex, int (*func)(BT_t*, int, void*), void *parameter) {
+int postOrderTraversalOnBT(BT_t *B, int nodeIndex, int (*func)(BT_t*, int, void*), void *parameter) {
     if (B == NULL) return -1;
-    if (rootIndex < 0) return -1;
-    if (rootIndex >= B->capacity) return -1;
+    if (nodeIndex < 0) return -1;
+    if (nodeIndex >= B->capacity) return -1;
     
     int index = -1;
-    index = postOrderTraversalOnBT(B, getLeftIndex(rootIndex), func, parameter);
+    index = postOrderTraversalOnBT(B, getLeftIndex(nodeIndex), func, parameter);
     if (index >= 0) return index;
-    index = postOrderTraversalOnBT(B, getRightIndex(rootIndex), func, parameter);
+    index = postOrderTraversalOnBT(B, getRightIndex(nodeIndex), func, parameter);
     if (index >= 0) return index;
     //    printf("post-order traversal : array[%d] = %d\n", root, B->array[root]);
-    index = func(B, rootIndex, parameter);
+    index = func(B, nodeIndex, parameter);
     if (index >= 0) return index;
     
     return -1;
 }
 
-int getHeightBT(BT_t *B, int rootIndex) {
+int getHeightBT(BT_t *B, int nodeIndex) {
     int rightmost = -1;
     for (int i=B->capacity - 1; i>=0; i--) {
         if (B->array[i] != NULL) {
@@ -187,18 +187,25 @@ int getHeightBT(BT_t *B, int rootIndex) {
     return height;
 }
 
+void *getElementOnBT(BT_t *B, int nodeIndex) {
+    // Block illegal parameters.
+    if (B == NULL) return NULL;
+    
+    return B->array[nodeIndex]->element;
+}
+
 //////////////////////////////////////////////////
 //  private
-int findElementIndexOnBT(BT_t *B, int rootIndex, int keyValue, BT_OPTION_e option) {
+int findElementIndexOnBT(BT_t *B, int nodeIndex, int keyValue, BT_OPTION_e option) {
     int index = -1;
     switch (option) {
         case BT_OPTION_BREADTH_FIRST_SEARCH:
             //            return breadthFirstFindElementIndexOnBT(B, value);
-            index = levelOrderTraversalOnBT(B, rootIndex, findElementIndexOnBTslave, &keyValue);
+            index = levelOrderTraversalOnBT(B, nodeIndex, findElementIndexOnBTslave, &keyValue);
             if (index >= 0) return index;
             break;
         case BT_OPTION_DEPTH_FIRST_SEARCH:
-            index = preOrderTraversalOnBT(B, rootIndex, findElementIndexOnBTslave, &keyValue);
+            index = preOrderTraversalOnBT(B, nodeIndex, findElementIndexOnBTslave, &keyValue);
             if (index >= 0) return index;
             break;
         default:

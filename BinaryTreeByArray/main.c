@@ -17,10 +17,10 @@ typedef struct Element {
 void test(void);
 Element_t *createElement(int value);
 bool destroyElement(Element_t *element);
-int levelOrderTraversalOnBTslave(BT_t *B, int rootIndex, void *parameter);
-int preOrderTraversalOnBTslave(BT_t *B, int rootIndex, void *parameter);
-int inOrderTraversalOnBTslave(BT_t *B, int rootIndex, void *parameter);
-int postOrderTraversalOnBTslave(BT_t *B, int rootIndex, void *parameter);
+int levelOrderTraversalOnBTslave(BT_t *B, int nodeIndex, void *parameter);
+int preOrderTraversalOnBTslave(BT_t *B, int nodeIndex, void *parameter);
+int inOrderTraversalOnBTslave(BT_t *B, int nodeIndex, void *parameter);
+int postOrderTraversalOnBTslave(BT_t *B, int nodeIndex, void *parameter);
 
 //////////////////////////////////////////////////
 int main(int argc, const char * argv[]) {
@@ -38,14 +38,14 @@ int main(int argc, const char * argv[]) {
 }
 
 void test() {
-    int capacity = 10;
+    int capacity = 12;
     int findKey = 5;
     int deleteValue = 2;
     const int root = 0;
     
     BT_t *B = createBT(capacity);
     for (int i=0; i<capacity; i++) {
-        Element_t *element = createElement(i*10);
+        Element_t *element = createElement(i);
         insertElementOnBT(B, i ,element);
     }
     
@@ -65,12 +65,12 @@ void test() {
     postOrderTraversalOnBT(B, root, inOrderTraversalOnBTslave, NULL);
     
     printf("*** breadth first find ***\n");
-    Element_t *element = findElementOnBT(B, findKey, BT_OPTION_BREADTH_FIRST_SEARCH);
-    printf("breadth first find keyValue %d [%s] : found value = %d\n", findKey, __func__, element->value);
+    Element_t *element1 = findElementOnBT(B, findKey, BT_OPTION_BREADTH_FIRST_SEARCH);
+    printf("breadth first find keyValue %d [%s] : found value = %d\n", findKey, __func__, element1->value);
 
     printf("*** depth first find ***\n");
-    element = findElementOnBT(B, findKey, BT_OPTION_DEPTH_FIRST_SEARCH);
-    printf("depth first find keyValue %d [%s] : found value = %d\n", findKey, __func__, element->value);
+    Element_t *element2 = findElementOnBT(B, findKey, BT_OPTION_DEPTH_FIRST_SEARCH);
+    printf("depth first find keyValue %d [%s] : found value = %d\n", findKey, __func__, element2->value);
 
     printf("*** delete ***\n");
     printf("--- Binary Tree ---\n");
@@ -103,23 +103,31 @@ bool destroyElement(Element_t *element) {
     return true;
 }
 
-int levelOrderTraversalOnBTslave(BT_t *B, int rootIndex, void *parameter) {
-    printf("level-order traversal : %d\n", B->array[rootIndex]->keyValue);
+int levelOrderTraversalOnBTslave(BT_t *B, int nodeIndex, void *parameter) {
+    Element_t *element = getElementOnBT(B, nodeIndex);
+
+    printf("level-order traversal : %d\n", element->value);
     return -1;  // none stop.
 }
 
-int preOrderTraversalOnBTslave(BT_t *B, int rootIndex, void *parameter) {
-    printf("pre-order traversal : %d\n", B->array[rootIndex]->keyValue);
+int preOrderTraversalOnBTslave(BT_t *B, int nodeIndex, void *parameter) {
+    Element_t *element = getElementOnBT(B, nodeIndex);
+
+    printf("pre-order traversal : %d\n", element->value);
     return -1;  // none stop.
 }
 
-int inOrderTraversalOnBTslave(BT_t *B, int rootIndex, void *parameter) {
-    printf("in-order traversal : %d\n", B->array[rootIndex]->keyValue);
+int inOrderTraversalOnBTslave(BT_t *B, int nodeIndex, void *parameter) {
+    Element_t *element = getElementOnBT(B, nodeIndex);
+
+    printf("in-order traversal : %d\n", element->value);
     return -1;  // none stop.
 }
 
-int postOrderTraversalOnBTslave(BT_t *B, int rootIndex, void *parameter) {
-    printf("post-order traversal : %d\n", B->array[rootIndex]->keyValue);
+int postOrderTraversalOnBTslave(BT_t *B, int nodeIndex, void *parameter) {
+    Element_t *element = getElementOnBT(B, nodeIndex);
+
+    printf("post-order traversal : %d\n", element->value);
     return -1;  // none stop.
 }
 
