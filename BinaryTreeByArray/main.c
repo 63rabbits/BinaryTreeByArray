@@ -38,13 +38,13 @@ int main(int argc, const char * argv[]) {
 }
 
 void test() {
-    int capacity = 12;
+    int numElement = 30;
     int findKey = 5;
     int deleteValue = 2;
     const int root = 0;
     
-    BT_t *B = createBT(capacity);
-    for (int i=0; i<capacity; i++) {
+    BT_t *B = createBT();
+    for (int i=0; i<numElement; i++) {
         Element_t *element = createElement(i);
         insertElementOnBT(B, i ,element);
     }

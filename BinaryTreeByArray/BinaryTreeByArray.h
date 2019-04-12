@@ -2,6 +2,8 @@
 #define BinaryTreeByArray_h
 
 //////////////////////////////////////////////////
+#define BT_INITIAL_CAPACITY 16;
+
 typedef enum BTOption {
     BT_OPTION_NONE,
     BT_OPTION_WITH_ELEMENT,
@@ -24,7 +26,7 @@ typedef struct BinaryTree {
 } BT_t;
 
 //////////////////////////////////////////////////
-BT_t *createBT(int capacity);
+BT_t *createBT(void);
 bool destroyBT(BT_t *B, BT_OPTION_e option);
 bool insertElementOnBT(BT_t *B, int keyValue, void *element);
 bool deleteElementOnBT(BT_t *B, int keyValue);

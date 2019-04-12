@@ -14,27 +14,21 @@
 
 //////////////////////////////////////////////////
 //  private
+void autoExpandArrayOnBT(BT_t *B);
 int findElementIndexOnBT(BT_t *B, int nodeIndex, int keyValue, BT_OPTION_e option);
 int findLeftmostLeefIndexOnBT(BT_t *B, int root);
 int findElementIndexOnBTslave(BT_t *B, int nodeIndex, void *keyValue);
 
 //////////////////////////////////////////////////
 //  public
-BT_t *createBT(int capacity) {
-    // Block illegal parameters.
-    if (capacity <= 0) return NULL;
-    
+BT_t *createBT(void) {
     BT_t *B = malloc(sizeof(BT_t));
     if (B == NULL) return NULL;
-    B->capacity = capacity;
-    B->array = calloc(capacity, sizeof(BTN_t**));
+    B->capacity = BT_INITIAL_CAPACITY;
+    B->array = calloc(B->capacity, sizeof(BTN_t**));
     if (B->array == NULL) {
         free(B);
         return NULL;
-    }
-    // initialize an array.
-    for (int i=0; i<B->capacity; i++) {
-        B->array[i] = NULL;
     }
     
     return B;
@@ -61,7 +55,12 @@ bool destroyBT(BT_t *B, BT_OPTION_e option) {
 }
 
 bool insertElementOnBT(BT_t *B, int keyValue, void *element) {
-    for (int i=0; i<B->capacity; i++) {
+//    for (int i=0; i<B->capacity; i++) {
+    int i = 0;
+    while (true) {
+        if (i >= B->capacity) {
+            autoExpandArrayOnBT(B);
+        }
         if (B->array[i] == NULL) {
             BTN_t *node = malloc(sizeof(BTN_t));
             if (node == NULL) return false;
@@ -70,6 +69,7 @@ bool insertElementOnBT(BT_t *B, int keyValue, void *element) {
             B->array[i] = node;
             return true;
         }
+        i++;
     }
     return false;
 }
@@ -124,8 +124,8 @@ int preOrderTraversalOnBT(BT_t *B, int nodeIndex, int (*func)(BT_t*, int, void*)
     if (B == NULL) return -1;
     if (nodeIndex < 0) return -1;
     if (nodeIndex >= B->capacity) return -1;
+    if (B->array[nodeIndex] == NULL) return -1;
     
-    //    printf("pre-order traversal : array[%d] = %d\n", root, B->array[root]);
     int index = -1;
     index = func(B, nodeIndex, parameter);
     if (index >= 0) return index;
@@ -141,11 +141,11 @@ int inOrderTraversalOnBT(BT_t *B, int nodeIndex, int (*func)(BT_t*, int, void*),
     if (B == NULL) return -1;
     if (nodeIndex < 0) return -1;
     if (nodeIndex >= B->capacity) return -1;
-    
+    if (B->array[nodeIndex] == NULL) return -1;
+
     int index = -1;
     index = inOrderTraversalOnBT(B, getLeftIndex(nodeIndex), func, parameter);
     if (index >= 0) return index;
-    //    printf("in-order traversal : array[%d] = %d\n", root, B->array[root]);
     index = func(B, nodeIndex, parameter);
     if (index >= 0) return index;
     index = preOrderTraversalOnBT(B, getRightIndex(nodeIndex), func, parameter);
@@ -158,13 +158,13 @@ int postOrderTraversalOnBT(BT_t *B, int nodeIndex, int (*func)(BT_t*, int, void*
     if (B == NULL) return -1;
     if (nodeIndex < 0) return -1;
     if (nodeIndex >= B->capacity) return -1;
-    
+    if (B->array[nodeIndex] == NULL) return -1;
+
     int index = -1;
     index = postOrderTraversalOnBT(B, getLeftIndex(nodeIndex), func, parameter);
     if (index >= 0) return index;
     index = postOrderTraversalOnBT(B, getRightIndex(nodeIndex), func, parameter);
     if (index >= 0) return index;
-    //    printf("post-order traversal : array[%d] = %d\n", root, B->array[root]);
     index = func(B, nodeIndex, parameter);
     if (index >= 0) return index;
     
@@ -196,6 +196,15 @@ void *getElementOnBT(BT_t *B, int nodeIndex) {
 
 //////////////////////////////////////////////////
 //  private
+void autoExpandArrayOnBT(BT_t *B) {
+    int newSize = B->capacity << 1;
+    B->array = realloc(B->array, sizeof(BTN_t**) * newSize);
+    for (int i=B->capacity; i<newSize; i++) {
+        B->array[i] = NULL;
+    }
+    B->capacity = newSize;
+}
+
 int findElementIndexOnBT(BT_t *B, int nodeIndex, int keyValue, BT_OPTION_e option) {
     int index = -1;
     switch (option) {
