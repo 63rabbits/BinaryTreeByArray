@@ -230,7 +230,9 @@ int findLeftmostLeefIndexOnBT(BT_t *B, int root) {
     int left = -1;
     int right = -1;
     left = findLeftmostLeefIndexOnBT(B, getLeftIndex(root));
-    if (left < 0) {
+    if ((left >= 0) &&
+        (left < B->capacity) &&
+        (B->array[left] == NULL)) {
         right = findLeftmostLeefIndexOnBT(B, getRightIndex(root));
     }
     return max(max(left, right), root);
