@@ -55,7 +55,6 @@ bool destroyBT(BT_t *B, BT_OPTION_e option) {
 }
 
 bool insertElementOnBT(BT_t *B, int keyValue, void *element) {
-//    for (int i=0; i<B->capacity; i++) {
     int i = 0;
     while (true) {
         if (i >= B->capacity) {
