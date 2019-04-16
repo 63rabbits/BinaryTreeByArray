@@ -78,9 +78,9 @@ bool deleteElementOnBT(BT_t *B, int keyValue) {
     //    Consider a subtree rooted at the node to be deleted.
     //    Replace the deletion node with the leftmost leaf of the subtree.
     int rootIndex = 0;
-    if (B->array[rootIndex] < 0) return false;
+    if (B->array[rootIndex] == NULL) return false;
     
-    int findIndex = findElementIndexOnBT(B, 0, keyValue, BT_OPTION_BREADTH_FIRST_SEARCH);
+    int findIndex = findElementIndexOnBT(B, rootIndex, keyValue, BT_OPTION_BREADTH_FIRST_SEARCH);
     if (findIndex < 0) return false;
     int leftmostIndex = findLeftmostLeefIndexOnBT(B, findIndex);
     
