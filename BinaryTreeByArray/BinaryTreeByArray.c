@@ -16,7 +16,7 @@
 //  private
 void autoExpandArrayOnBT(BT_t *B);
 int findElementIndexOnBT(BT_t *B, int rootIndex, int keyValue, BT_OPTION_e option);
-int findLeftmostLeefIndexOnBT(BT_t *B, int rootIndex);
+int findLeftmostLeafIndexOnBT(BT_t *B, int rootIndex);
 int findElementIndexOnBTslave(BT_t *B, int rootIndex, void *keyValue);
 
 //////////////////////////////////////////////////
@@ -82,7 +82,7 @@ bool deleteElementOnBT(BT_t *B, int keyValue) {
     
     int findIndex = findElementIndexOnBT(B, rootIndex, keyValue, BT_OPTION_BREADTH_FIRST_SEARCH);
     if (findIndex < 0) return false;
-    int leftmostIndex = findLeftmostLeefIndexOnBT(B, findIndex);
+    int leftmostIndex = findLeftmostLeafIndexOnBT(B, findIndex);
     
     // delete node
     if (findIndex == leftmostIndex) {
@@ -223,17 +223,17 @@ int findElementIndexOnBT(BT_t *B, int rootIndex, int keyValue, BT_OPTION_e optio
     return -1;
 }
 
-int findLeftmostLeefIndexOnBT(BT_t *B, int rootIndex) {
+int findLeftmostLeafIndexOnBT(BT_t *B, int rootIndex) {
     if (rootIndex < 0) return -1;
     if (rootIndex >= B->capacity) return -1;
     
     int leftIndex = -1;
     int rightIndex = -1;
-    leftIndex = findLeftmostLeefIndexOnBT(B, getLeftIndex(rootIndex));
+    leftIndex = findLeftmostLeafIndexOnBT(B, getLeftIndex(rootIndex));
     if ((leftIndex >= 0) &&
         (leftIndex < B->capacity) &&
         (B->array[leftIndex] == NULL)) {
-        rightIndex = findLeftmostLeefIndexOnBT(B, getRightIndex(rootIndex));
+        rightIndex = findLeftmostLeafIndexOnBT(B, getRightIndex(rootIndex));
     }
     return max(max(leftIndex, rightIndex), rootIndex);
 }
