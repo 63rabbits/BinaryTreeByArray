@@ -80,21 +80,21 @@ bool deleteElementOnBT(BT_t *B, int keyValue) {
     int root = 0;
     if (B->array[root] < 0) return false;
     
-    int target = findElementIndexOnBT(B, 0, keyValue, BT_OPTION_BREADTH_FIRST_SEARCH);
-    if (target < 0) return false;
-    int leftmost = findLeftmostLeefIndexOnBT(B, target);
+    int findIndex = findElementIndexOnBT(B, 0, keyValue, BT_OPTION_BREADTH_FIRST_SEARCH);
+    if (findIndex < 0) return false;
+    int leftmostIndex = findLeftmostLeefIndexOnBT(B, findIndex);
     
     // delete node
-    if (target == leftmost) {
-        free(B->array[target]->element);
-        free(B->array[target]);
-        B->array[target] = NULL;
+    if (findIndex == leftmostIndex) {
+        free(B->array[findIndex]->element);
+        free(B->array[findIndex]);
+        B->array[findIndex] = NULL;
     }
     else {
-        free(B->array[target]->element);
-        free(B->array[target]);
-        B->array[target] = B->array[leftmost];
-        B->array[leftmost] = NULL;
+        free(B->array[findIndex]->element);
+        free(B->array[findIndex]);
+        B->array[findIndex] = B->array[leftmostIndex];
+        B->array[leftmostIndex] = NULL;
     }
     
     return true;
@@ -172,16 +172,16 @@ int postOrderTraversalOnBT(BT_t *B, int rootIndex, int (*func)(BT_t*, int, void*
 }
 
 int getHeightBT(BT_t *B, int rootIndex) {
-    int rightmost = -1;
+    int righmostIndex = -1;
     for (int i=B->capacity - 1; i>=0; i--) {
         if (B->array[i] != NULL) {
-            rightmost = i;
+            righmostIndex = i;
             break;
         }
     }
     int height = 0;
-    if (rightmost >= 0) {
-        height = floor(log2(rightmost + 1));
+    if (righmostIndex >= 0) {
+        height = floor(log2(righmostIndex + 1));
     }
     
     return height;
@@ -227,15 +227,15 @@ int findLeftmostLeefIndexOnBT(BT_t *B, int rootIndex) {
     if (rootIndex < 0) return -1;
     if (rootIndex >= B->capacity) return -1;
     
-    int left = -1;
-    int right = -1;
-    left = findLeftmostLeefIndexOnBT(B, getLeftIndex(rootIndex));
-    if ((left >= 0) &&
-        (left < B->capacity) &&
-        (B->array[left] == NULL)) {
-        right = findLeftmostLeefIndexOnBT(B, getRightIndex(rootIndex));
+    int leftIndex = -1;
+    int rightIndex = -1;
+    leftIndex = findLeftmostLeefIndexOnBT(B, getLeftIndex(rootIndex));
+    if ((leftIndex >= 0) &&
+        (leftIndex < B->capacity) &&
+        (B->array[leftIndex] == NULL)) {
+        rightIndex = findLeftmostLeefIndexOnBT(B, getRightIndex(rootIndex));
     }
-    return max(max(left, right), rootIndex);
+    return max(max(leftIndex, rightIndex), rootIndex);
 }
 
 int findElementIndexOnBTslave(BT_t *B, int rootIndex, void *keyValue) {

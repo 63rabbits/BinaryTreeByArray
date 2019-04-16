@@ -1,5 +1,5 @@
 #include <unistd.h>
-//#define checkMemoryLeak
+#define checkMemoryLeak
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -17,10 +17,10 @@ typedef struct Element {
 void test(void);
 Element_t *createElement(int value);
 bool destroyElement(Element_t *element);
-int levelOrderTraversalOnBTslave(BT_t *B, int nodeIndex, void *parameter);
-int preOrderTraversalOnBTslave(BT_t *B, int nodeIndex, void *parameter);
-int inOrderTraversalOnBTslave(BT_t *B, int nodeIndex, void *parameter);
-int postOrderTraversalOnBTslave(BT_t *B, int nodeIndex, void *parameter);
+int levelOrderTraversalOnBTslave(BT_t *B, int rootIndex, void *parameter);
+int preOrderTraversalOnBTslave(BT_t *B, int rootIndex, void *parameter);
+int inOrderTraversalOnBTslave(BT_t *B, int rootIndex, void *parameter);
+int postOrderTraversalOnBTslave(BT_t *B, int rootIndex, void *parameter);
 
 //////////////////////////////////////////////////
 int main(int argc, const char * argv[]) {
@@ -103,29 +103,29 @@ bool destroyElement(Element_t *element) {
     return true;
 }
 
-int levelOrderTraversalOnBTslave(BT_t *B, int nodeIndex, void *parameter) {
-    Element_t *element = getElementOnBT(B, nodeIndex);
+int levelOrderTraversalOnBTslave(BT_t *B, int rootIndex, void *parameter) {
+    Element_t *element = getElementOnBT(B, rootIndex);
 
     printf("level-order traversal : %d\n", element->value);
     return -1;  // none stop.
 }
 
-int preOrderTraversalOnBTslave(BT_t *B, int nodeIndex, void *parameter) {
-    Element_t *element = getElementOnBT(B, nodeIndex);
+int preOrderTraversalOnBTslave(BT_t *B, int rootIndex, void *parameter) {
+    Element_t *element = getElementOnBT(B, rootIndex);
 
     printf("pre-order traversal : %d\n", element->value);
     return -1;  // none stop.
 }
 
-int inOrderTraversalOnBTslave(BT_t *B, int nodeIndex, void *parameter) {
-    Element_t *element = getElementOnBT(B, nodeIndex);
+int inOrderTraversalOnBTslave(BT_t *B, int rootIndex, void *parameter) {
+    Element_t *element = getElementOnBT(B, rootIndex);
 
     printf("in-order traversal : %d\n", element->value);
     return -1;  // none stop.
 }
 
-int postOrderTraversalOnBTslave(BT_t *B, int nodeIndex, void *parameter) {
-    Element_t *element = getElementOnBT(B, nodeIndex);
+int postOrderTraversalOnBTslave(BT_t *B, int rootIndex, void *parameter) {
+    Element_t *element = getElementOnBT(B, rootIndex);
 
     printf("post-order traversal : %d\n", element->value);
     return -1;  // none stop.
