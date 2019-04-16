@@ -1,5 +1,5 @@
 #include <unistd.h>
-#define checkMemoryLeak
+//#define checkMemoryLeak
 
 #include <stdio.h>
 #include <stdlib.h>
