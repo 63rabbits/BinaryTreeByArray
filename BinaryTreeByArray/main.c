@@ -49,33 +49,34 @@ void test() {
         insertElementOnBT(B, i ,element);
     }
     
-    printf("--- Binary Tree ---\n");
+#ifdef DEBUG
     viewBT(B, BT_OPTION_VIEW_INT);
-
-    printf("*** level-order traversal ***\n");
+#endif
+    printf("\n*** level-order traversal ***\n");
     levelOrderTraversalOnBT(B, root, levelOrderTraversalOnBTslave, NULL);
     
-    printf("*** pre-order traversal ***\n");
+    printf("\n*** pre-order traversal ***\n");
     preOrderTraversalOnBT(B, root, preOrderTraversalOnBTslave, NULL);
     
-    printf("*** in-order traversal ***\n");
+    printf("\n*** in-order traversal ***\n");
     inOrderTraversalOnBT(B, root, inOrderTraversalOnBTslave, NULL);
     
-    printf("*** post-order traversal ***\n");
+    printf("\n*** post-order traversal ***\n");
     postOrderTraversalOnBT(B, root, inOrderTraversalOnBTslave, NULL);
     
-    printf("*** breadth first find ***\n");
+    printf("\n*** breadth first find ***\n");
     Element_t *element1 = findElementOnBT(B, findKey, BT_OPTION_BREADTH_FIRST_SEARCH);
     printf("breadth first find keyValue %d [%s] : found value = %d\n", findKey, __func__, element1->value);
 
-    printf("*** depth first find ***\n");
+    printf("\n*** depth first find ***\n");
     Element_t *element2 = findElementOnBT(B, findKey, BT_OPTION_DEPTH_FIRST_SEARCH);
     printf("depth first find keyValue %d [%s] : found value = %d\n", findKey, __func__, element2->value);
 
-    printf("*** delete ***\n");
-    printf("--- Binary Tree ---\n");
+    printf("\n*** delete ***\n");
+#ifdef DEBUG
     viewBT(B, BT_OPTION_VIEW_INT);
-
+#endif
+    
     bool c = deleteElementOnBT(B, deleteValue);
     if (c) {
         printf("delete value %d : success.\n", deleteValue);
@@ -83,9 +84,10 @@ void test() {
     else {
         printf("error [%s] : could not delete value = %d.\n", __func__, deleteValue);
     }
-    printf("--- Binary Tree ---\n");
+#ifdef DEBUG
     viewBT(B, BT_OPTION_VIEW_INT);
-
+#endif
+    
     destroyBT(B, BT_OPTION_WITH_ELEMENT);
 }
 

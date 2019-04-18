@@ -37,7 +37,9 @@ int inOrderTraversalOnBT(BT_t *B, int rootIndex, int (*func)(BT_t*, int, void*),
 int postOrderTraversalOnBT(BT_t *B, int rootIndex, int (*func)(BT_t*, int, void*), void *parameter);
 int getHeightBT(BT_t *B, int rootIndex);
 void *getElementOnBT(BT_t *B, int rootIndex);
-// for debug
+
+#ifdef DEBUG
 void viewBT(BT_t *B, BT_OPTION_e option);
+#endif
 
 #endif

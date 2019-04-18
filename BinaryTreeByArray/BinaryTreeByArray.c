@@ -250,9 +250,11 @@ int findElementIndexOnBTslave(BT_t *B, int rootIndex, void *keyValue) {
     return -1;
 }
 
+#ifdef DEBUG
 //////////////////////////////////////////////////
 //  debug
 void viewBT(BT_t *B, BT_OPTION_e option) {
+    printf("\n--- Binary Tree ---\n");
     int root = 0;
     int wordWidth = 4;
     if (option == BT_OPTION_VIEW_CHAR) {
@@ -314,4 +316,4 @@ void viewBT(BT_t *B, BT_OPTION_e option) {
     }
     printf("\n");
 }
-
+#endif
