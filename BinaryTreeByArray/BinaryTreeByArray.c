@@ -14,7 +14,7 @@
 
 //////////////////////////////////////////////////
 //  private
-void autoExpandArrayOnBT(BT_t *B);
+bool autoExpandArrayOnBT(BT_t *B);
 int findElementIndexOnBT(BT_t *B, int rootIndex, int keyValue, BT_OPTION_e option);
 int findLeftmostLeafIndexOnBT(BT_t *B, int rootIndex);
 int findElementIndexOnBTslave(BT_t *B, int rootIndex, void *keyValue);
@@ -58,7 +58,8 @@ bool insertElementOnBT(BT_t *B, int keyValue, void *element) {
     int i = 0;
     while (true) {
         if (i >= B->capacity) {
-            autoExpandArrayOnBT(B);
+            bool check = autoExpandArrayOnBT(B);
+            if (!check) return false;
         }
         if (B->array[i] == NULL) {
             BTN_t *node = malloc(sizeof(BTN_t));
@@ -195,13 +196,15 @@ void *getElementOnBT(BT_t *B, int rootIndex) {
 
 //////////////////////////////////////////////////
 //  private
-void autoExpandArrayOnBT(BT_t *B) {
+bool autoExpandArrayOnBT(BT_t *B) {
     int newSize = B->capacity << 1;
+    if (newSize <= B->capacity) return false;
     B->array = realloc(B->array, sizeof(BTN_t**) * newSize);
     for (int i=B->capacity; i<newSize; i++) {
         B->array[i] = NULL;
     }
     B->capacity = newSize;
+    return true;
 }
 
 int findElementIndexOnBT(BT_t *B, int rootIndex, int keyValue, BT_OPTION_e option) {
