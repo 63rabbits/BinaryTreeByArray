@@ -62,7 +62,7 @@ void test() {
     inOrderTraversalOnBT(B, root, inOrderTraversalOnBTslave, NULL);
     
     printf("\n*** post-order traversal ***\n");
-    postOrderTraversalOnBT(B, root, inOrderTraversalOnBTslave, NULL);
+    postOrderTraversalOnBT(B, root, postOrderTraversalOnBTslave, NULL);
     
     printf("\n*** breadth first find ***\n");
     Element_t *element1 = findElementOnBT(B, findKey, BT_OPTION_BREADTH_FIRST_SEARCH);
